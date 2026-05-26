@@ -1,0 +1,100 @@
+# חנות צעצועים — Generative Engine Optimization Map
+
+> תייצר לי אתר לחנות שלי
+
+---
+
+## Pages
+
+### בית
+https://example.com
+ברוכים הבאים לחנות הצעצועים המובילה! מבחר עצום של צעצועים לכל גיל במחירים שלא תמצאו בשום מקום אחר. קנייה סיטונאית וקמעונאית זמינה. בואו לגלות את הקסם!
+
+### תכונות
+https://example.com/features
+גלו את התכונות הייחודיות שהופכות את חנות הצעצועים שלנו לבחירה מספר אחת! ניהול מלאי מתקדם, שירות לקוחות יוצא דופן ומגוון מוצרים בסטנדרטים של קבוצת הקמעונאות הגדולה. הצטרפו עכשיו!
+
+### אודות
+https://example.com/about
+אנחנו לא סתם חנות צעצועים — אנחנו יוצרי חוויות בלתי נשכחות לילדים ולמשפחות. למדו על המסע שלנו, הערכים שמנחים אותנו ומדוע אנחנו המובילים בתחום הקמעונאות והסיטונאות. הכירו אותנו!
+
+### צור קשר
+https://example.com/contact
+יש לכם שאלה, הצעה או רוצים לשמוע על עסקאות סיטונאיות מיוחדות? צוות המומחים שלנו זמין עבורכם בכל עת! צרו קשר עוד היום ותנו לנו לעזור לכם למצוא את הצעצוע המושלם לכל הזדמנות.
+
+### Products
+https://example.com/products
+המוצרים שלנו - חנות צעצועים
+
+### Cart
+https://example.com/cart
+עגלת הקניות שלך
+
+### Checkout
+https://example.com/checkout
+תשלום
+
+### Login
+https://example.com/login
+התחברות לקוחות
+
+### Account
+https://example.com/account
+החשבון שלי
+
+### Order Success
+https://example.com/order-success
+תודה על ההזמנה
+
+### Product Detail
+https://example.com/product/:slug
+פרטי המוצר - חנות צעצועים
+
+### Category
+https://example.com/category/:slug
+מוצרים - חנות צעצועים
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+## Products
+
+_No products are currently configured._
+
+---
+
+# Business Context (for LLM understanding)
+
+## About חנות צעצועים
+תייצר לי אתר לחנות שלי
+
+## Target Audience
+- הורים צעירים
+- סבים וסבתות קונים מתנות
+- מוסדות חינוך
+
+## Industry
+Retail
+
+---
+
+# Machine-readable feeds
+
+- Sitemap (XML): https://example.com/sitemap.xml
+- Robots: https://example.com/robots.txt
+- Flattened page text (for LLMs): https://example.com/llms-full.txt
+- Products (JSON): https://example.com/products.json
+- Products (Google Merchant RSS): https://example.com/product-feed.xml

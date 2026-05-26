@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>גלה עולם של צעצועים מדהימים — חנות צעצועים</title>
+    <meta name="description" content="ברוכים הבאים לחנות הצעצועים המובילה! מבחר עצום של צעצועים לכל גיל במחירים שלא תמצאו בשום מקום אחר. קנייה סיטונאית וקמעונאית זמינה. בואו לגלות את הקסם!">
+    <meta name="keywords" content="חנות צעצועים, driveline retail merchandising, wholesale and retail, צעצועים לילדים, קניות אונליין">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: '3e0a0d63-9968-4cee-87ff-340392f77f0d',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="גלה עולם של צעצועים מדהימים — חנות צעצועים">
+    <meta property="og:description" content="ברוכים הבאים לחנות הצעצועים המובילה! מבחר עצום של צעצועים לכל גיל במחירים שלא תמצאו בשום מקום אחר. קנייה סיטונאית וקמעונאית זמינה. בואו לגלות את הקסם!">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="גלה עולם של צעצועים מדהימים — חנות צעצועים">
+    <meta name="twitter:description" content="ברוכים הבאים לחנות הצעצועים המובילה! מבחר עצום של צעצועים לכל גיל במחירים שלא תמצאו בשום מקום אחר. קנייה סיטונאית וקמעונאית זמינה. בואו לגלות את הקסם!">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .skip-link { position: absolute; top: 0; left: 0; transform: translateY(-200%); padding: 12px 18px; background: var(--bg-dark, #1a1a1a); color: var(--text-light, #fff); font-weight: 600; border-radius: 0 0 8px 0; z-index: 10000; }
+    .skip-link:focus { transform: none; outline: 2px solid var(--ring, #fff); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 3px; }
+  </style>
+
+
+  
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-dark) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-dark) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-dark) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "3e0a0d63-9968-4cee-87ff-340392f77f0d";window.ZAPPY_API_BASE = "https://api.zappy5.com";</script><a class="skip-link" href="#main">דלג לתוכן הראשי</a>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="[business_phone]" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-right-group"><div class="nav-brand">
+      <a href="/" class="logo-link"><img class="logo" src="/assets/site-----image-1.webp" alt="חנות צעצועים"></a>
+    </div><ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/products">
+        מוצרים
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/products">כל הקורסים</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/">בית</a></li><li><a href="/features">תכונות</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span class="cart-count">0</span></a><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div></div>
+
+    
+
+    
+  </div>
+</nav>
+
+    <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu" dir="rtl" style="display:none">
+      <div class="catalog-menu-container">
+        <a href="/products" class="catalog-menu-item catalog-menu-all">כל הקורסים</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .navbar,
+          nav.navbar {
+            min-height: 70px !important;
+          }
+
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            margin-top: auto !important;
+            margin-bottom: auto !important;
+            transform: none !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-dark)) !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+          }
+
+          html[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          body[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] header .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] nav .phone-header-btn {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '0', 'important');
+          mobileToggle.style.setProperty('bottom', '0', 'important');
+          mobileToggle.style.setProperty('margin-top', 'auto', 'important');
+          mobileToggle.style.setProperty('margin-bottom', 'auto', 'important');
+          mobileToggle.style.setProperty('transform', 'none', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '0', 'important');
+          phoneBtn.style.setProperty('bottom', '0', 'important');
+          phoneBtn.style.setProperty('margin-top', 'auto', 'important');
+          phoneBtn.style.setProperty('margin-bottom', 'auto', 'important');
+          phoneBtn.style.setProperty('transform', 'none', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu handler (shared by click and touchend)
+    function handleToggle(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+      const closeIcon = newToggle.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    }
+    
+    // Use click for desktop/emulation and touchend as iOS Safari fallback.
+    // Prevent double-fire with a timestamp guard.
+    var lastToggleTime = 0;
+    function guardedToggle(e) {
+      var now = Date.now();
+      if (now - lastToggleTime < 300) return;
+      lastToggleTime = now;
+      handleToggle(e);
+    }
+    
+    newToggle.addEventListener('click', guardedToggle);
+    newToggle.addEventListener('touchend', guardedToggle);
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main id="main">
+    <section data-band-index="0" class="index-hero-section" data-layout-spec="בית-hero" dir="rtl" data-hero-type="fullscreen-scrim">
+  <!-- Background Image Layer -->
+  <div class="index-hero-bg">
+    <img loading="eager" fetchpriority="high" data-hero-bg="true" data-placeholder="index-hero-image-1" data-context="Premium toy store shop window scene, cinematic and magical atmosphere. Beautifully arranged educational wooden toys, colorful building blocks, plush animals, and crafted paper-cut scenery displayed like a high-end boutique window. Warm sunset golden light with deep ink shadows, soft grain texture, rich editorial composition. Warm peach and lavender color palette with lush textures." width="1200" height="700" src="/assets/site-index-hero-image-1.webp" alt="עולם הצעצועים הקסום של החנות שלנו - תצוגת חלון פרמיום עם צעצועים חינוכיים ובובות רכות">
+  </div>
+
+  <!-- Scrim Overlay -->
+  <div class="index-hero-scrim" aria-hidden="true"></div>
+
+  <!-- Content Overlay -->
+  <div class="index-hero-container">
+    <div class="index-hero-content">
+      <!-- Eyebrow label -->
+      <span class="index-hero-eyebrow">ברוכים הבאים לחנות הצעצועים</span>
+
+      <h1 class="index-hero-h1">עולם של קסם,<br>צעצוע אחד בכל פעם</h1>
+
+      <h3 class="index-hero-subtitle">אוסף מיוחד של צעצועים חינוכיים, מתנות מושלמות ושמחה יומיומית — נבחרו באהבה עבור ילדים, הורים וסבים.</h3>
+
+      <div class="index-hero-ctas">
+        <a href="/contact" class="index-hero-btn-primary">
+          <span>צרו קשר</span>
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <a href="/features" class="index-hero-btn-secondary">
+          <span>גלו את המוצרים</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paper texture grain overlay -->
+  <div class="index-hero-grain" aria-hidden="true"></div>
+
+  <!-- Bottom Scalloped Divider -->
+  <div class="index-hero-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,52
+           Q60,38 120,50 T240,44
+           Q300,38 360,50 T480,44
+           Q540,38 600,50 T720,44
+           Q780,38 840,50 T960,44
+           Q1020,38 1080,50 T1200,44
+           Q1260,38 1320,50 T1440,44
+           L1440,90 Z" fill="#FDF8F2"></path>
+    </svg>
+  </div>
+</section>
+
+    <section class="featured-products-section" id="featured-products" data-zappy-dynamic="true">
+      <div class="container">
+        <h2 class="section-title">מוצרים מומלצים</h2>
+        <div class="product-grid featured-grid" id="zappy-featured-products">
+          <div class="loading-products">טוען מוצרים...</div>
+        </div>
+        <div class="view-all-products">
+          <a href="/products" class="btn btn-primary">צפה בכל הקורסים →</a>
+        </div>
+      </div>
+    </section>
+  
+
+    <section class="featured-categories-section" id="featured-categories" data-zappy-dynamic="true">
+      <div class="container">
+        <h2 class="section-title">קנו לפי קטגוריה</h2>
+        <div class="category-blocks" id="zappy-featured-categories">
+          <div class="loading-categories">טוען מוצרים...</div>
+        </div>
+      </div>
+    </section>
+  
+
+<section data-band-index="1" class="index-features-section" data-layout-spec="בית-features" dir="rtl">
+  <!-- Decorative leaf motif - right -->
+  <div class="ifs-leaf-right" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="140" height="160">
+      <ellipse cx="70" cy="80" rx="55" ry="75" fill="#F5C27A" opacity="0.52" transform="rotate(-20 70 80)"></ellipse>
+      <ellipse cx="85" cy="95" rx="38" ry="55" fill="#FFB38A" opacity="0.38" transform="rotate(-35 85 95)"></ellipse>
+      <line x1="70" y1="155" x2="70" y2="30" stroke="#D4956A" stroke-width="2" opacity="0.35"></line>
+      <line x1="70" y1="100" x2="40" y2="70" stroke="#D4956A" stroke-width="1.5" opacity="0.28"></line>
+      <line x1="70" y1="115" x2="100" y2="85" stroke="#D4956A" stroke-width="1.5" opacity="0.28"></line>
+    </svg>
+  </div>
+
+  <!-- Decorative leaf motif - left -->
+  <div class="ifs-leaf-left" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="140">
+      <ellipse cx="60" cy="70" rx="48" ry="65" fill="#9EE6CF" opacity="0.48" transform="rotate(18 60 70)"></ellipse>
+      <ellipse cx="45" cy="82" rx="32" ry="48" fill="#A8D8A8" opacity="0.36" transform="rotate(30 45 82)"></ellipse>
+      <line x1="60" y1="135" x2="60" y2="20" stroke="#5BAD8A" stroke-width="2" opacity="0.32"></line>
+      <line x1="60" y1="90" x2="88" y2="62" stroke="#5BAD8A" stroke-width="1.5" opacity="0.26"></line>
+      <line x1="60" y1="106" x2="32" y2="78" stroke="#5BAD8A" stroke-width="1.5" opacity="0.26"></line>
+    </svg>
+  </div>
+
+  <div class="ifs-container">
+    <!-- Section Intro -->
+    <div class="ifs-intro">
+      <span class="ifs-eyebrow">הבטחות שלנו לכם</span>
+      <h2 class="ifs-heading">צעצועים שנבחרו באהבה,<br>לכל גיל ולכל רגע</h2>
+      <p class="ifs-subtext">בחנות צעצועים אנחנו מאמינים שמשחק טוב הוא הרבה יותר מבידור — הוא חוויה שמעצבת ילדות. לכן כל מוצר שנמצא אצלנו עבר סינון קפדני, עם לב פתוח ועיניים של הורים.</p>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="ifs-grid">
+
+      <!-- Card 1: Curated Selection -->
+      <article class="ifs-card">
+        <div class="ifs-card-backplate ifs-backplate-peach" aria-hidden="true"></div>
+        <div class="ifs-card-inner">
+          <figure class="ifs-card-image-wrap">
+            <img loading="lazy" decoding="async" data-placeholder="index-features-image-1" data-context="Close-up flat lay of beautifully curated premium toys arranged on a warm ivory paper surface — wooden blocks, soft plush animals, and colorful educational games — lit with soft warm light evoking a premium toy boutique curation feel" width="400" height="300" src="/assets/site-index-features-image-1.webp" alt="מבחר צעצועים איכותיים שנבחרו בקפידה">
+          </figure>
+          <div class="ifs-card-body">
+            <div class="ifs-icon-wrap ifs-icon-peach">
+              <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M14 3L17.5 10.2L25.5 11.3L19.75 16.9L21.2 24.9L14 21.1L6.8 24.9L8.25 16.9L2.5 11.3L10.5 10.2L14 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"></path>
+              </svg>
+            </div>
+            <h3 class="ifs-card-title">בחירה בקפידה</h3>
+            <p class="ifs-card-text">כל צעצוע בחנות שלנו עבר הערכה אישית — לפי בטיחות, ערך חינוכי ואיכות חומרים. אנחנו מציעים רק את מה שהיינו קונים לילדים שלנו.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: Gifting for All Ages -->
+      <article class="ifs-card">
+        <div class="ifs-card-backplate ifs-backplate-lavender" aria-hidden="true"></div>
+        <div class="ifs-card-inner">
+          <figure class="ifs-card-image-wrap">
+            <img loading="lazy" decoding="async" data-placeholder="index-features-image-2" data-context="Warm styled photo of beautifully wrapped toy gift boxes with colorful ribbons and gift tags, arranged on a wooden surface — evoking thoughtful gifting for children of all ages, from babies to teenagers, in a premium toy store setting" width="400" height="300" src="/assets/site-index-features-image-2.webp" alt="מתנות לכל גיל ולכל אירוע">
+          </figure>
+          <div class="ifs-card-body">
+            <div class="ifs-icon-wrap ifs-icon-lavender">
+              <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="3" y="12" width="22" height="14" rx="2" stroke="currentColor" stroke-width="2" fill="none"></rect>
+                <path d="M3 12V10C3 8.9 3.9 8 5 8H23C24.1 8 25 8.9 25 10V12" stroke="currentColor" stroke-width="2"></path>
+                <path d="M14 8V26" stroke="currentColor" stroke-width="2"></path>
+                <path d="M14 8C14 8 10 5 8 7C6 9 10 12 14 8Z" stroke="currentColor" stroke-width="1.8" fill="none"></path>
+                <path d="M14 8C14 8 18 5 20 7C22 9 18 12 14 8Z" stroke="currentColor" stroke-width="1.8" fill="none"></path>
+              </svg>
+            </div>
+            <h3 class="ifs-card-title">מתנה מושלמת לכל גיל</h3>
+            <p class="ifs-card-text">מתינוקות ועד נוער — יש לנו את המתנה הנכונה לכל אירוע. צוות החנות ישמח לעזור לכם למצוא את הבחירה המושלמת, גם אם אתם לא בטוחים בדיוק מה לחפש.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3: Educational Environments -->
+      <article class="ifs-card">
+        <div class="ifs-card-backplate ifs-backplate-mint" aria-hidden="true"></div>
+        <div class="ifs-card-inner">
+          <figure class="ifs-card-image-wrap">
+            <img loading="lazy" decoding="async" data-placeholder="index-features-image-3" data-context="Bright cheerful photo of educational toys and learning games — colorful puzzles, STEM building sets, alphabet blocks, and art supplies — arranged neatly on a classroom or playroom shelf, suggesting toys suitable for kindergartens and educational environments" width="400" height="300" src="/assets/site-index-features-image-3.webp" alt="צעצועים חינוכיים לגנים ומסגרות חינוכיות">
+          </figure>
+          <div class="ifs-card-body">
+            <div class="ifs-icon-wrap ifs-icon-mint">
+              <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M4 22L14 5L24 22H4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"></path>
+                <path d="M4 22H24" stroke="currentColor" stroke-width="2"></path>
+                <circle cx="14" cy="17" r="2" stroke="currentColor" stroke-width="1.8" fill="none"></circle>
+                <path d="M14 15V12" stroke="currentColor" stroke-width="1.8"></path>
+              </svg>
+            </div>
+            <h3 class="ifs-card-title">מתאים למסגרות חינוכיות</h3>
+            <p class="ifs-card-text">מגוון הצעצועים שלנו כולל פתרונות מצוינים לגני ילדים, בתי ספר וקבוצות נוער. צעצועים שמעודדים יצירתיות, שיתוף פעולה ולמידה דרך משחק.</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- Bottom Divider: diagonal mint-to-ivory band -->
+  <div class="ifs-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ifs-divider-grad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#C0E8E4"></stop>
+          <stop offset="100%" stop-color="#FFF9F1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,90 L0,55 Q200,20 400,45 Q600,68 800,30 Q1000,5 1200,38 L1200,90 Z" fill="#FDF8F2"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section data-band-index="2" class="index-showcase-section" data-layout-spec="בית-showcase" dir="rtl">
+  <!-- Decorative floating leaf left -->
+  <div class="showcase-leaf showcase-leaf-start" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" width="120" height="140" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M60 10 C20 20, 5 60, 15 100 C25 130, 55 138, 65 130 C80 118, 95 80, 90 50 C85 25, 70 5, 60 10Z" fill="#A8D8A8" opacity="0.45"></path>
+      <path d="M60 10 C60 10, 60 80, 55 130" stroke="#7EBF7E" stroke-width="1.5" opacity="0.4"></path>
+    </svg>
+  </div>
+  <!-- Decorative floating leaf end -->
+  <div class="showcase-leaf showcase-leaf-end" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" width="140" height="160" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 8 C110 18, 138 55, 128 100 C118 138, 80 152, 55 140 C28 126, 10 85, 18 50 C26 18, 50 2, 70 8Z" fill="#F5C27A" opacity="0.5"></path>
+      <path d="M40 130 C60 100, 90 60, 80 10" stroke="#E8A84A" stroke-width="1.5" opacity="0.4"></path>
+    </svg>
+  </div>
+
+  <div class="showcase-container">
+    <!-- Content Column (START = RIGHT in RTL) -->
+    <div class="showcase-content">
+      <span class="showcase-eyebrow">חנות הצעצועים שלנו</span>
+      <h2 class="showcase-heading">כאן כל רגע הופך לזיכרון</h2>
+      <p class="showcase-description">אנחנו מאמינים שהצעצוע הנכון יכול להדליק דמיון, לחזק קשר, ולהפוך כל אירוע למיוחד. בחנות שלנו תמצאו מגוון רחב של מוצרים שנבחרו בקפידה עבור ילדים בכל גיל — ממשחקי למידה ועד מתנות חג מושלמות.</p>
+
+      <!-- Shopping Moments List -->
+      <ul class="showcase-moments">
+        <li class="showcase-moment-item">
+          <div class="moment-icon-wrap">
+            <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="14" cy="14" r="13" fill="#FFB38A" opacity="0.18"></circle>
+              <path d="M14 6 C14 6, 10 8, 10 12 C10 15, 12 16, 14 16 C16 16, 18 15, 18 12 C18 8, 14 6, 14 6Z" fill="#FFB38A"></path>
+              <rect x="9" y="16" width="10" height="7" rx="2" fill="#FFB38A" opacity="0.7"></rect>
+              <line x1="14" y1="16" x2="14" y2="23" stroke="#FF8C42" stroke-width="1.2"></line>
+              <line x1="9" y1="19" x2="19" y2="19" stroke="#FF8C42" stroke-width="1.2"></line>
+            </svg>
+          </div>
+          <div class="moment-content">
+            <h3 class="moment-title">מתנות יום הולדת</h3>
+            <p class="moment-text">מצאו את המתנה המושלמת לכל גיל — ממשחקי יצירה ועד צעצועי פעולה מרגשים שישמחו כל ילד.</p>
+          </div>
+        </li>
+        <li class="showcase-moment-item">
+          <div class="moment-icon-wrap">
+            <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="14" cy="14" r="13" fill="#BFA6FF" opacity="0.18"></circle>
+              <polygon points="14,4 16.5,11 24,11 18,15.5 20.5,22.5 14,18 7.5,22.5 10,15.5 4,11 11.5,11" fill="#BFA6FF" opacity="0.85"></polygon>
+            </svg>
+          </div>
+          <div class="moment-content">
+            <h3 class="moment-title">מתנות חג ואירועים</h3>
+            <p class="moment-text">חנוכה, פסח, ראש השנה — לכל חג יש את הצעצוע שלו. בחרו מסלים מוכנים או הרכיבו מתנה אישית בעצמכם.</p>
+          </div>
+        </li>
+        <li class="showcase-moment-item">
+          <div class="moment-icon-wrap">
+            <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="14" cy="14" r="13" fill="#9EE6CF" opacity="0.18"></circle>
+              <path d="M8 20 L8 12 L14 7 L20 12 L20 20 Z" stroke="#9EE6CF" stroke-width="1.8" fill="none"></path>
+              <rect x="11" y="15" width="6" height="5" rx="1" fill="#9EE6CF" opacity="0.7"></rect>
+              <circle cx="14" cy="11" r="2" fill="#9EE6CF" opacity="0.9"></circle>
+            </svg>
+          </div>
+          <div class="moment-content">
+            <h3 class="moment-title">משחק חינוכי ולמידה</h3>
+            <p class="moment-text">פאזלים, לגו, משחקי לוח ומשחקי מדע — כי הכי טוב ללמוד כשמשחקים ומתפתחים יחד.</p>
+          </div>
+        </li>
+      </ul>
+
+      <a href="/contact" class="showcase-cta btn-primary">גלו את כל המוצרים</a>
+    </div>
+
+    <!-- Image Composition Column (END = LEFT in RTL) -->
+    <div class="showcase-imagery">
+      <!-- Back tile (peeks from top-end and bottom-start) -->
+      <div class="showcase-tile showcase-tile-back">
+        <img loading="lazy" decoding="async" data-placeholder="index-showcase-image-2" data-context="Colorful premium toy store display with educational toys, building blocks, and gift-wrapped packages arranged on warm wooden shelves with soft pastel lighting — Israeli toy retail store atmosphere" width="480" height="360" src="/assets/site-index-showcase-image-2.webp" alt="מגוון צעצועים חינוכיים ומתנות בחנות הצעצועים">
+      </div>
+      <!-- Main tile -->
+      <div class="showcase-tile showcase-tile-main">
+        <img loading="lazy" decoding="async" data-placeholder="index-showcase-image-1" data-context="Happy child playing with colorful toys — a young child joyfully playing with building blocks and creative toys on a light background, warm and inviting family atmosphere, premium toy store product photography" width="520" height="390" src="/assets/site-index-showcase-image-1.webp" alt="ילד שמח משחק עם צעצועים צבעוניים">
+        <!-- Paper frame accent -->
+        <div class="tile-frame-accent" aria-hidden="true"></div>
+      </div>
+      <!-- Corner accent badge -->
+      <div class="showcase-badge" aria-hidden="true">
+        <span class="badge-text">✨ בחירת ההורים</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom torn-paper SVG divider -->
+  <div class="showcase-divider-wrapper">
+    <!-- Candy red-orange accent line -->
+    <div class="showcase-accent-line" aria-hidden="true"></div>
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,38 Q30,28 60,36 T120,30 Q160,34 200,26 T280,32 Q320,28 360,34 T440,26 Q480,30 520,24 T600,30 Q640,26 680,32 T760,24 Q800,30 840,22 T920,28 Q960,24 1000,30 T1080,22 Q1120,28 1160,20 T1240,26 Q1300,22 1340,28 T1440,24 L1440,90 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="3" class="index-testimonials-section" dir="rtl" data-layout-spec="בית-testimonials">
+  <!-- Decorative background confetti (top area) -->
+  <div class="itest-bg-decoration" aria-hidden="true"></div>
+
+  <div class="itest-container">
+    <!-- Section Header -->
+    <div class="itest-header">
+      <span class="itest-eyebrow">לקוחות מספרים</span>
+      <h2 class="itest-title">משפחות אוהבות את חנות צעצועים</h2>
+      <p class="itest-subtitle">הורים, סבא וסבתא, ואנשי חינוך — כולם חוזרים אלינו שוב ושוב</p>
+    </div>
+
+    <!-- Testimonial Cards Grid -->
+    <div class="itest-grid">
+
+      <!-- Card 1 — Young Parent -->
+      <article class="itest-card itest-card--peach">
+        <div class="itest-card-motif" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="24,4 29,18 44,18 32,27 37,42 24,33 11,42 16,27 4,18 19,18" fill="#FFB38A" opacity="0.55"></polygon>
+          </svg>
+        </div>
+        <blockquote class="itest-quote">
+          <p>"מצאתי כאן צעצועים שבאמת מתאימים לגיל של הילד שלי — לא רק יפים, אלא גם מעוררי דמיון. הצוות עזר לי לבחור ויצאתי עם חיוך. ממליצה בחום לכל הורה!"</p>
+        </blockquote>
+        <footer class="itest-author">
+          <div class="itest-author-avatar">
+            <img loading="lazy" decoding="async" data-placeholder="parent-mom-portrait" data-context="Warm portrait of a young Israeli mother, smiling, casual style, soft natural light" width="48" height="48" src="/assets/site-parent-mom-portrait.webp" alt="מיכל כהן">
+          </div>
+          <div class="itest-author-info">
+            <strong class="itest-author-name">מיכל כהן</strong>
+            <span class="itest-author-role">אמא לשלושה, תל אביב</span>
+          </div>
+          <div class="itest-stars" aria-label="דירוג 5 כוכבים">
+            <span aria-hidden="true">★★★★★</span>
+          </div>
+        </footer>
+      </article>
+
+      <!-- Card 2 — Grandparent -->
+      <article class="itest-card itest-card--lavender">
+        <div class="itest-card-motif" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Kite shape -->
+            <polygon points="24,3 42,24 24,38 6,24" fill="#BFA6FF" opacity="0.5"></polygon>
+            <line x1="24" y1="38" x2="24" y2="46" stroke="#BFA6FF" stroke-width="2" stroke-linecap="round" opacity="0.5"></line>
+            <line x1="20" y1="43" x2="28" y2="43" stroke="#BFA6FF" stroke-width="2" stroke-linecap="round" opacity="0.5"></line>
+          </svg>
+        </div>
+        <blockquote class="itest-quote">
+          <p>"קניתי כאן מתנות לנכדים שלי לכל החגים. תמיד מוצאת משהו מיוחד שגורם להם לקפוץ מאושר. חנות צעצועים היא המקום שאני הכי אוהבת לבקר בו!"</p>
+        </blockquote>
+        <footer class="itest-author">
+          <div class="itest-author-avatar">
+            <img loading="lazy" decoding="async" data-placeholder="grandmother-portrait" data-context="Warm portrait of a cheerful Israeli grandmother, silver hair, kind eyes, soft background" width="48" height="48" src="/assets/site-grandmother-portrait.webp" alt="רות לוי">
+          </div>
+          <div class="itest-author-info">
+            <strong class="itest-author-name">רות לוי</strong>
+            <span class="itest-author-role">סבתא גאה, חיפה</span>
+          </div>
+          <div class="itest-stars" aria-label="דירוג 5 כוכבים">
+            <span aria-hidden="true">★★★★★</span>
+          </div>
+        </footer>
+      </article>
+
+      <!-- Card 3 — Educator -->
+      <article class="itest-card itest-card--mint">
+        <div class="itest-card-motif" aria-hidden="true">
+          <svg data-no-icon-icon="true" data-no-icon-edit="true" aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Puzzle piece -->
+            <path d="M10,10 L22,10 C22,10 20,14 22,16 C24,18 28,16 28,16 L28,10 L38,10 L38,22 C38,22 34,20 32,22 C30,24 32,28 32,28 L38,28 L38,38 L26,38 C26,38 28,34 26,32 C24,30 20,32 20,32 L20,38 L10,38 L10,26 C10,26 14,28 16,26 C18,24 16,20 16,20 L10,20 Z" fill="#9EE6CF" opacity="0.55"></path>
+          </svg>
+        </div>
+        <blockquote class="itest-quote">
+          <p>"כמורה לגן, אני מחפשת צעצועים שמעודדים יצירתיות ולמידה. בחנות צעצועים מצאתי מגוון מדהים של משחקים חינוכיים איכותיים. הצוות מקצועי ויודע לייעץ מצוין."</p>
+        </blockquote>
+        <footer class="itest-author">
+          <div class="itest-author-avatar">
+            <img loading="lazy" decoding="async" data-placeholder="educator-portrait" data-context="Portrait of a friendly Israeli kindergarten teacher, professional yet warm, bright classroom background" width="48" height="48" src="/assets/site-educator-portrait.webp" alt="דנה ברק">
+          </div>
+          <div class="itest-author-info">
+            <strong class="itest-author-name">דנה ברק</strong>
+            <span class="itest-author-role">גננת ומחנכת, ירושלים</span>
+          </div>
+          <div class="itest-stars" aria-label="דירוג 5 כוכבים">
+            <span aria-hidden="true">★★★★★</span>
+          </div>
+        </footer>
+      </article>
+
+    </div>
+    <!-- /grid -->
+
+    <!-- Trust bar -->
+    <div class="itest-trust-bar">
+      <div class="itest-trust-item">
+        <span class="itest-trust-number">+2,500</span>
+        <span class="itest-trust-label">משפחות מרוצות</span>
+      </div>
+      <div class="itest-trust-divider" aria-hidden="true"></div>
+      <div class="itest-trust-item">
+        <span class="itest-trust-number">4.9 ★</span>
+        <span class="itest-trust-label">דירוג ממוצע</span>
+      </div>
+      <div class="itest-trust-divider" aria-hidden="true"></div>
+      <div class="itest-trust-item">
+        <span class="itest-trust-number">10+</span>
+        <span class="itest-trust-label">שנות ניסיון</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom divider: gradient fade + confetti motifs -->
+  <div class="itest-divider-wrapper">
+    <!-- Confetti scatter (CSS-only) -->
+    <div class="itest-confetti" aria-hidden="true">
+      <span class="itest-confetti-piece itest-cp1"></span>
+      <span class="itest-confetti-piece itest-cp2"></span>
+      <span class="itest-confetti-piece itest-cp3"></span>
+      <span class="itest-confetti-piece itest-cp4"></span>
+      <span class="itest-confetti-piece itest-cp5"></span>
+      <span class="itest-confetti-piece itest-cp6"></span>
+      <span class="itest-confetti-piece itest-cp7"></span>
+      <span class="itest-confetti-piece itest-cp8"></span>
+    </div>
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="itest-fade-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FFF9F1" stop-opacity="0"></stop>
+          <stop offset="100%" stop-color="#2A2540" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,90 L0,30 Q100,20 200,35 T400,25 Q500,18 600,30 T800,22 Q900,15 1000,28 T1200,20 L1200,90 Z" fill="#2A2540"></path>
+      <rect x="0" y="0" width="1200" height="90" fill="url(#itest-fade-grad)"></rect>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="4" class="index-cta-section" data-layout-spec="בית-cta" dir="rtl">
+  <!-- Decorative background arcs -->
+  <div class="index-cta-arc index-cta-arc--right" aria-hidden="true"></div>
+  <div class="index-cta-arc index-cta-arc--left" aria-hidden="true"></div>
+
+  <!-- Spotlight glows -->
+  <div class="index-cta-glow index-cta-glow--right" aria-hidden="true"></div>
+  <div class="index-cta-glow index-cta-glow--left" aria-hidden="true"></div>
+
+  <!-- Paper-cut arc SVGs -->
+  <svg class="index-cta-papercut index-cta-papercut--top-right" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M320,0 Q200,80 240,200 Q270,280 320,320 Z" fill="rgba(191,166,255,0.10)"></path>
+    <path d="M320,40 Q230,110 260,220 Q285,295 320,320 Z" fill="rgba(255,179,138,0.07)"></path>
+  </svg>
+  <svg class="index-cta-papercut index-cta-papercut--bottom-left" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,320 Q100,240 60,120 Q30,40 0,0 Z" fill="rgba(158,230,207,0.09)"></path>
+    <path d="M0,280 Q90,210 55,100 Q25,25 0,0 Z" fill="rgba(191,166,255,0.07)"></path>
+  </svg>
+
+  <div class="index-cta-container">
+    <div class="index-cta-badge">חנות צעצועים</div>
+    <h2 class="index-cta-heading">לא בטוחים איזה צעצוע לבחור?<br>אנחנו כאן בשבילכם</h2>
+    <p class="index-cta-description">בין אם אתם מחפשים מתנה מושלמת ליום הולדת, ערכת משחק לימודית לגיל הרך, או אוסף צעצועים שמעורר דמיון — הצוות שלנו ישמח לעזור לכם למצוא בדיוק את מה שמתאים לילד ולמטרה. בואו נבנה יחד חוויית משחק שלא תישכח.</p>
+    <div class="index-cta-buttons">
+      <a href="/contact" class="index-cta-btn index-cta-btn--primary">דברו איתנו</a>
+      <a href="/about" class="index-cta-btn index-cta-btn--secondary">קראו עלינו</a>
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer" dir="rtl" aria-label="כותרת תחתונה של האתר">
+  <div class="footer-top">
+    <div class="footer-container">
+
+      <!-- Column 1: Company Info -->
+      <div class="footer-col footer-brand">
+        <img src="/assets/retail-logo.webp" alt="חנות צעצועים" class="logo">
+        <p class="footer-tagline">עולם הדמיון מתחיל כאן — צעצועים איכותיים שמעוררים השראה, שמחה ויצירתיות לכל גיל.</p>
+        <div class="footer-badges">
+          <span class="badge"><i class="fas fa-truck"></i> משלוח חינם מעל ₪199</span>
+          <span class="badge"><i class="fas fa-headset"></i> תמיכה 24/7</span>
+        </div>
+      </div>
+
+      <!-- Column 2: Quick Links -->
+      <div class="footer-col footer-links">
+        <h3 class="footer-heading">ניווט מהיר</h3>
+        <ul class="footer-nav">
+          <li><a href="/">בית</a></li>
+          <li><a href="/features">תכונות</a></li>
+          <li><a href="/about">אודות</a></li>
+          <li><a href="/contact">צור קשר</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Contact -->
+      <div class="footer-col footer-contact-col">
+        <h3 class="footer-heading">יצירת קשר</h3>
+        <ul class="footer-contact">
+          <li>
+            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+            <span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span>
+          </li>
+          <li>
+            <span class="contact-icon"><i class="fas fa-phone"></i></span>
+            <span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span>
+          </li>
+          <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+            <span class="contact-text">[business_address]</span></a></li>
+        </ul>
+        <div class="footer-hours">
+          <h4 class="footer-hours-title"><i class="fas fa-clock"></i> שעות פעילות</h4>
+          <ul class="hours-list">
+            <li><a href="/"><span class="day">ראשון – חמישי</span><span class="time">09:00 – 20:00</span></a></li>
+            <li><a href="/"><span class="day">שישי</span><span class="time">09:00 – 14:00</span></a></li>
+            <li><a href="/"><span class="day">שבת</span><span class="time closed">סגור</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Column 4: Social -->
+      <div class="footer-col footer-social-col">
+        <h3 class="footer-heading">עקבו אחרינו</h3>
+        <p class="footer-social-desc">הצטרפו לקהילה שלנו וגלו עולמות חדשים של משחק ויצירה</p>
+        <div class="footer-social-icons">
+          
+          
+          
+        </div>
+        <div class="footer-trust">
+          <span class="trust-badge"><i class="fas fa-shield-alt"></i> קנייה מאובטחת</span>
+          <span class="trust-badge"><i class="fas fa-undo"></i> החזרה קלה</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="footer-divider"></div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bottom">
+    <div class="footer-container footer-bottom-inner">
+      <p class="footer-copyright">© 2026 חנות צעצועים. כל הזכויות שמורות.</p>
+      <div class="footer-legal">
+        <a href="/privacy">מדיניות פרטיות</a>
+        <span class="footer-sep">·</span>
+        <a href="/terms">תנאי שימוש</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות">
+              מדיניות החזרות
+            </a>
+        <span class="footer-sep">·</span>
+        <a href="/accessibility">נגישות</a>
+        <span class="footer-sep">·</span>
+        <a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>

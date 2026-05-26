@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>הסיפור שמאחורי החיוכים של הילדים — חנות צעצועים</title>
+    <meta name="description" content="אנחנו לא סתם חנות צעצועים — אנחנו יוצרי חוויות בלתי נשכחות לילדים ולמשפחות. למדו על המסע שלנו, הערכים שמנחים אותנו ומדוע אנחנו המובילים בתחום הקמעונאות והסיטונאות. הכירו אותנו!">
+    <meta name="keywords" content="חנות צעצועים, wholesale and retail, אודות החנות, היסטוריה עסקית, ערכי המותג">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: '3e0a0d63-9968-4cee-87ff-340392f77f0d',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="הסיפור שמאחורי החיוכים של הילדים — חנות צעצועים">
+    <meta property="og:description" content="אנחנו לא סתם חנות צעצועים — אנחנו יוצרי חוויות בלתי נשכחות לילדים ולמשפחות. למדו על המסע שלנו, הערכים שמנחים אותנו ומדוע אנחנו המובילים בתחום הקמעונאות והסיטונאות. הכירו אותנו!">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="הסיפור שמאחורי החיוכים של הילדים — חנות צעצועים">
+    <meta name="twitter:description" content="אנחנו לא סתם חנות צעצועים — אנחנו יוצרי חוויות בלתי נשכחות לילדים ולמשפחות. למדו על המסע שלנו, הערכים שמנחים אותנו ומדוע אנחנו המובילים בתחום הקמעונאות והסיטונאות. הכירו אותנו!">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .skip-link { position: absolute; top: 0; left: 0; transform: translateY(-200%); padding: 12px 18px; background: var(--bg-dark, #1a1a1a); color: var(--text-light, #fff); font-weight: 600; border-radius: 0 0 8px 0; z-index: 10000; }
+    .skip-link:focus { transform: none; outline: 2px solid var(--ring, #fff); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 3px; }
+  </style>
+
+
+  
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-dark) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-dark) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-dark) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "3e0a0d63-9968-4cee-87ff-340392f77f0d";window.ZAPPY_API_BASE = "https://api.zappy5.com";</script><a class="skip-link" href="#main">דלג לתוכן הראשי</a>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="[business_phone]" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-right-group"><div class="nav-brand">
+      <a href="/" class="logo-link"><img class="logo" src="/assets/site-------image-1.webp" alt="חנות צעצועים"></a>
+    </div><ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/products">
+        מוצרים
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/products">כל הקורסים</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/">בית</a></li><li><a href="/features">תכונות</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span class="cart-count">0</span></a><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div></div>
+
+    
+
+    
+  </div>
+</nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .navbar,
+          nav.navbar {
+            min-height: 70px !important;
+          }
+
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            margin-top: auto !important;
+            margin-bottom: auto !important;
+            transform: none !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-dark)) !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+          }
+
+          html[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          body[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] header .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] nav .phone-header-btn {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '0', 'important');
+          mobileToggle.style.setProperty('bottom', '0', 'important');
+          mobileToggle.style.setProperty('margin-top', 'auto', 'important');
+          mobileToggle.style.setProperty('margin-bottom', 'auto', 'important');
+          mobileToggle.style.setProperty('transform', 'none', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '0', 'important');
+          phoneBtn.style.setProperty('bottom', '0', 'important');
+          phoneBtn.style.setProperty('margin-top', 'auto', 'important');
+          phoneBtn.style.setProperty('margin-bottom', 'auto', 'important');
+          phoneBtn.style.setProperty('transform', 'none', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu handler (shared by click and touchend)
+    function handleToggle(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+      const closeIcon = newToggle.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    }
+    
+    // Use click for desktop/emulation and touchend as iOS Safari fallback.
+    // Prevent double-fire with a timestamp guard.
+    var lastToggleTime = 0;
+    function guardedToggle(e) {
+      var now = Date.now();
+      if (now - lastToggleTime < 300) return;
+      lastToggleTime = now;
+      handleToggle(e);
+    }
+    
+    newToggle.addEventListener('click', guardedToggle);
+    newToggle.addEventListener('touchend', guardedToggle);
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main id="main">
+    <section class="about-story-section" data-layout-spec="אודות-story" dir="rtl">
+  <!-- Decorative grain overlay -->
+  <div class="about-story-grain" aria-hidden="true"></div>
+
+  <!-- Floating leaf decorations -->
+  <div class="about-story-leaf-right" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="140" height="160">
+      <path d="M70,10 C90,10 130,40 125,90 C120,135 80,155 60,148 C40,140 15,110 20,70 C25,30 50,10 70,10 Z" fill="#F5C27A" opacity="0.55"></path>
+      <path d="M70,10 C70,10 68,80 50,148" stroke="#D4A855" stroke-width="2" opacity="0.4" fill="none"></path>
+      <path d="M70,10 C70,10 95,60 125,90" stroke="#D4A855" stroke-width="1.5" opacity="0.3" fill="none"></path>
+    </svg>
+  </div>
+  <div class="about-story-leaf-left" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="140">
+      <path d="M60,8 C80,8 110,35 105,80 C100,120 65,138 48,132 C30,125 8,98 12,62 C16,26 40,8 60,8 Z" fill="#A8D8A8" opacity="0.5"></path>
+      <path d="M60,8 C60,8 58,72 42,132" stroke="#7BB87B" stroke-width="2" opacity="0.35" fill="none"></path>
+    </svg>
+  </div>
+
+  <div class="about-story-container">
+    <!-- Text column (RIGHT in RTL) -->
+    <div class="about-story-content">
+      <span class="about-story-eyebrow">הסיפור שלנו</span>
+      <h1 class="about-story-heading">מקום שבו<br>צעצועים הופכים<br>לזיכרונות</h1>
+      <p class="about-story-lead">חנות הצעצועים שלנו נולדה מתוך אהבה אמיתית לילדים ולרגעים שיוצרים חיוכים. אנחנו בוחרים כל צעצוע בקפידה — לא רק לפי מה שנמכר, אלא לפי מה שמדליק ניצוץ בעיניים.</p>
+      <p class="about-story-body">כל מוצר שנמצא על המדפים שלנו עבר בחירה מחושבת: בטיחות, יצירתיות, ואיכות שעומדת במבחן הזמן. אנחנו מאמינים שמשחק הוא שפה — ואנחנו כאן כדי לעזור לכם לדבר אותה בצורה הכי יפה שיש.</p>
+
+      <!-- Value statement -->
+      <div class="about-story-values">
+        <div class="about-story-value-item">
+          <span class="about-story-value-icon" aria-hidden="true">✦</span>
+          <span class="about-story-value-text">בחירה מקצועית לכל גיל</span>
+        </div>
+        <div class="about-story-value-item">
+          <span class="about-story-value-icon" aria-hidden="true">✦</span>
+          <span class="about-story-value-text">מוצרים בטוחים ואיכותיים</span>
+        </div>
+        <div class="about-story-value-item">
+          <span class="about-story-value-icon" aria-hidden="true">✦</span>
+          <span class="about-story-value-text">שירות חם ואישי</span>
+        </div>
+      </div>
+
+      <a href="#contact" class="about-story-cta btn-primary">צרו קשר</a>
+    </div>
+
+    <!-- Image column (LEFT in RTL) -->
+    <div class="about-story-image-col">
+      <div class="about-story-image-frame">
+        <img loading="eager" fetchpriority="high" data-placeholder="about-story-image-1" data-context="Warm editorial lifestyle photo of a beautifully curated toy store interior: wooden shelves filled with colorful quality toys, soft warm lighting, a smiling store owner or parent and child browsing together, premium retail atmosphere with a magical and inviting feel — suitable for a Hebrew family toy store about page" width="600" height="750" src="/assets/site-about-story-image-1.webp" alt="חנות צעצועים — חוויה חמה ואישית" class="about-story-img">
+        <!-- Decorative badge -->
+        <div class="about-story-badge" aria-hidden="true">
+          <span class="about-story-badge-number">15+</span>
+          <span class="about-story-badge-label">שנות ניסיון</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom divider: soft curved paper-layer edge -->
+  <div class="about-story-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,45 Q120,30 240,48 T480,38 Q600,28 720,44 T960,36 Q1080,28 1200,42 T1440,38 L1440,90 Z" fill="#F5EFE6"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="about-values-section" data-layout-spec="אודות-values" dir="rtl">
+  <!-- Decorative background texture -->
+  <div class="about-values-texture" aria-hidden="true"></div>
+
+  <!-- Floating botanical decorations -->
+  <div class="about-values-leaf-right" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="140" height="160">
+      <ellipse cx="70" cy="80" rx="42" ry="68" fill="#F5C27A" opacity="0.55" transform="rotate(-20 70 80)"></ellipse>
+      <ellipse cx="95" cy="60" rx="28" ry="50" fill="#FFB38A" opacity="0.38" transform="rotate(15 95 60)"></ellipse>
+      <line x1="70" y1="150" x2="70" y2="30" stroke="#E8A060" stroke-width="2" opacity="0.4"></line>
+    </svg>
+  </div>
+  <div class="about-values-leaf-left" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="150">
+      <ellipse cx="60" cy="75" rx="38" ry="62" fill="#9EE6CF" opacity="0.45" transform="rotate(18 60 75)"></ellipse>
+      <ellipse cx="38" cy="55" rx="22" ry="42" fill="#BFA6FF" opacity="0.3" transform="rotate(-12 38 55)"></ellipse>
+      <line x1="60" y1="140" x2="60" y2="20" stroke="#7ECFB8" stroke-width="1.5" opacity="0.4"></line>
+    </svg>
+  </div>
+
+  <div class="about-values-container">
+    <!-- Section intro -->
+    <div class="about-values-intro">
+      <span class="about-values-eyebrow">הערכים שלנו</span>
+      <h2 class="about-values-heading">מה שמנחה אותנו בכל צעצוע</h2>
+      <p class="about-values-subtext">אנחנו מאמינים שצעצוע טוב הוא הרבה יותר מסתם מוצר — הוא חוויה, הזדמנות לצמיחה, ורגע של שמחה אמיתית. שלושת הערכים הבאים מנחים כל בחירה שאנחנו עושים עבורכם ועבור ילדיכם.</p>
+    </div>
+
+    <!-- Value cards row -->
+    <div class="about-values-grid">
+
+      <!-- Card 1: Quality over clutter -->
+      <article class="about-values-card">
+        <figure class="about-values-illustration" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="100">
+            <!-- Star/quality symbol -->
+            <circle cx="60" cy="50" r="36" fill="#FFF0E8" stroke="#FFB38A" stroke-width="2"></circle>
+            <polygon points="60,22 66,42 88,42 71,55 77,75 60,62 43,75 49,55 32,42 54,42" fill="#FFB38A" opacity="0.85"></polygon>
+            <circle cx="60" cy="50" r="10" fill="#FFF9F1"></circle>
+            <!-- Small decorative dots -->
+            <circle cx="20" cy="20" r="4" fill="#BFA6FF" opacity="0.5"></circle>
+            <circle cx="100" cy="80" r="5" fill="#9EE6CF" opacity="0.5"></circle>
+            <circle cx="15" cy="75" r="3" fill="#FFB38A" opacity="0.4"></circle>
+          </svg>
+        </figure>
+        <div class="about-values-card-body">
+          <h3 class="about-values-card-title">איכות על פני כמות</h3>
+          <p class="about-values-card-text">אנחנו בוחרים בקפידה כל מוצר שנכנס לחנות. פחות רעש, יותר משמעות — צעצועים שנבחרו בגלל ערכם האמיתי, עמידותם, ויכולתם לעורר דמיון ולהישאר אהובים לאורך שנים.</p>
+          <div class="about-values-card-accent"></div>
+        </div>
+      </article>
+
+      <!-- Card 2: Play with purpose -->
+      <article class="about-values-card about-values-card--secondary">
+        <figure class="about-values-illustration" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="100">
+            <!-- Puzzle/purpose symbol -->
+            <rect x="18" y="18" width="34" height="34" rx="6" fill="#EDE0F5" stroke="#BFA6FF" stroke-width="2"></rect>
+            <rect x="68" y="18" width="34" height="34" rx="6" fill="#D8CCF0" stroke="#BFA6FF" stroke-width="2"></rect>
+            <rect x="18" y="58" width="34" height="34" rx="6" fill="#D8CCF0" stroke="#BFA6FF" stroke-width="2"></rect>
+            <rect x="68" y="58" width="34" height="34" rx="6" fill="#EDE0F5" stroke="#BFA6FF" stroke-width="2"></rect>
+            <!-- Connection lines -->
+            <path d="M52 35 Q60 35 60 35 Q60 35 68 35" stroke="#BFA6FF" stroke-width="2" stroke-dasharray="3 2"></path>
+            <path d="M35 52 Q35 60 35 60 Q35 60 35 68" stroke="#BFA6FF" stroke-width="2" stroke-dasharray="3 2"></path>
+            <path d="M85 52 Q85 60 85 60 Q85 60 85 68" stroke="#BFA6FF" stroke-width="2" stroke-dasharray="3 2"></path>
+            <!-- Small accent -->
+            <circle cx="100" cy="18" r="4" fill="#FFB38A" opacity="0.5"></circle>
+            <circle cx="18" cy="88" r="3" fill="#9EE6CF" opacity="0.5"></circle>
+          </svg>
+        </figure>
+        <div class="about-values-card-body">
+          <h3 class="about-values-card-title">משחק עם מטרה</h3>
+          <p class="about-values-card-text">כל צעצוע שאנחנו מציעים תומך בהתפתחות — קוגניטיבית, יצירתית או חברתית. אנחנו מאמינים שמשחק טוב מניח יסודות לחיים שלמים, ולכן אנחנו בוחרים מוצרים שמלמדים תוך כדי שמחה.</p>
+          <div class="about-values-card-accent about-values-card-accent--secondary"></div>
+        </div>
+      </article>
+
+      <!-- Card 3: Joyful gift experiences -->
+      <article class="about-values-card about-values-card--accent">
+        <figure class="about-values-illustration" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="100">
+            <!-- Gift box -->
+            <rect x="22" y="42" width="76" height="46" rx="6" fill="#D4F0EC" stroke="#9EE6CF" stroke-width="2"></rect>
+            <rect x="16" y="30" width="88" height="18" rx="5" fill="#C0E8E4" stroke="#9EE6CF" stroke-width="2"></rect>
+            <!-- Ribbon vertical -->
+            <rect x="55" y="30" width="10" height="58" rx="3" fill="#9EE6CF" opacity="0.7"></rect>
+            <!-- Ribbon horizontal -->
+            <rect x="16" y="36" width="88" height="10" rx="3" fill="#9EE6CF" opacity="0.7"></rect>
+            <!-- Bow loops -->
+            <ellipse cx="52" cy="28" rx="14" ry="8" fill="none" stroke="#9EE6CF" stroke-width="2.5" transform="rotate(-20 52 28)"></ellipse>
+            <ellipse cx="68" cy="28" rx="14" ry="8" fill="none" stroke="#9EE6CF" stroke-width="2.5" transform="rotate(20 68 28)"></ellipse>
+            <circle cx="60" cy="28" r="5" fill="#9EE6CF"></circle>
+            <!-- Sparkles -->
+            <circle cx="95" cy="22" r="3" fill="#FFB38A" opacity="0.6"></circle>
+            <circle cx="20" cy="20" r="4" fill="#BFA6FF" opacity="0.5"></circle>
+            <path d="M105 55 L108 50 L111 55 L108 60 Z" fill="#FFB38A" opacity="0.5"></path>
+          </svg>
+        </figure>
+        <div class="about-values-card-body">
+          <h3 class="about-values-card-title">מתנה שמשמחת באמת</h3>
+          <p class="about-values-card-text">רגע המתנה הוא קסם. אנחנו דואגים שכל חבילה שיוצאת מהחנות תיצור חוויה בלתי נשכחת — לילד ולמבוגר כאחד. עטיפה יפה, בחירה אישית, ושמחה שנמשכת הרבה אחרי שהנייר נפתח.</p>
+          <div class="about-values-card-accent about-values-card-accent--teal"></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- Zigzag paper edge bottom divider -->
+  <div class="about-values-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Lavender shadow layer -->
+      <path d="M0,70 L0,32 L30,46 L60,28 L90,44 L120,26 L150,42 L180,24 L210,40 L240,22 L270,38 L300,20 L330,36 L360,18 L390,34 L420,16 L450,32 L480,14 L510,30 L540,12 L570,28 L600,10 L630,28 L660,12 L690,30 L720,14 L750,32 L780,16 L810,34 L840,18 L870,36 L900,20 L930,38 L960,22 L990,40 L1020,24 L1050,42 L1080,26 L1110,44 L1140,28 L1170,46 L1200,30 L1200,70 Z" fill="#F5EFE6" opacity="0.35"></path>
+      <!-- Main fill matching next section -->
+      <path d="M0,70 L0,36 L30,50 L60,32 L90,48 L120,30 L150,46 L180,28 L210,44 L240,26 L270,42 L300,24 L330,40 L360,22 L390,38 L420,20 L450,36 L480,18 L510,34 L540,16 L570,32 L600,14 L630,32 L660,16 L690,34 L720,18 L750,36 L780,20 L810,38 L840,22 L870,40 L900,24 L930,42 L960,26 L990,44 L1020,28 L1050,46 L1080,30 L1110,48 L1140,32 L1170,50 L1200,34 L1200,70 Z" fill="#F5EFE6"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section class="about-gallery-section" data-layout-spec="אודות-gallery" dir="rtl">
+  <!-- Decorative background texture -->
+  <div class="about-gallery-texture" aria-hidden="true"></div>
+
+  <div class="about-gallery-container">
+    <!-- Section Header -->
+    <div class="about-gallery-header">
+      <span class="about-gallery-label">הצצה לעולם שלנו</span>
+      <h2 class="about-gallery-title">מרחב שמזמין לגעת, לגלות ולחלום</h2>
+      <p class="about-gallery-subtitle">כל פינה בחנות מעוצבת בקפידה — כדי שהביקור אצלנו יהיה חוויה שלמה, לא רק קנייה.</p>
+    </div>
+
+    <!-- Asymmetric 2x2 Grid -->
+    <div class="about-gallery-grid">
+
+      <!-- Large Tile — Top Start (right in RTL) -->
+      <figure class="about-gallery-tile about-gallery-tile--large">
+        <div class="about-gallery-img-wrap">
+          <img loading="lazy" decoding="async" data-placeholder="about-gallery-image-1" data-context="Warm, premium toy store interior with wooden shelving units displaying colorful curated toys, soft natural lighting, cozy atmosphere, editorial photography style, shallow depth of field, warm ivory and peach tones" width="600" height="480" src="/assets/site-about-gallery-image-1.webp" alt="פנים החנות — מדפי עץ עם צעצועים מאורגנים בצבעוניות חמה">
+        </div>
+        <figcaption class="about-gallery-caption">אווירת החנות</figcaption>
+      </figure>
+
+      <!-- Supporting Tiles Column -->
+      <div class="about-gallery-supporting">
+
+        <!-- Tile 2 -->
+        <figure class="about-gallery-tile about-gallery-tile--sm">
+          <div class="about-gallery-img-wrap">
+            <img loading="lazy" decoding="async" data-placeholder="about-gallery-image-2" data-context="Close-up macro shot of tactile wooden toys and colorful building blocks arranged on a natural linen surface, editorial product photography, warm soft lighting, pastel lavender and peach accents" width="400" height="260" src="/assets/site-about-gallery-image-2.webp" alt="פרטי צעצועי עץ ואבני בניין בצבעים עדינים">
+          </div>
+          <figcaption class="about-gallery-caption">פרטים שמספרים סיפור</figcaption>
+        </figure>
+
+        <!-- Tile 3 -->
+        <figure class="about-gallery-tile about-gallery-tile--sm">
+          <div class="about-gallery-img-wrap">
+            <img loading="lazy" decoding="async" data-placeholder="about-gallery-image-3" data-context="Curated toy display window or shelf arrangement in a premium toy boutique, beautifully styled with plush toys, puzzles and wooden toys, warm golden hour light, magazine-quality composition" width="400" height="260" src="/assets/site-about-gallery-image-3.webp" alt="תצוגה מאורגנת של צעצועים נבחרים בחלון הראווה">
+          </div>
+          <figcaption class="about-gallery-caption">תצוגת הראווה</figcaption>
+        </figure>
+
+      </div>
+
+      <!-- Tile 4 — Wide Bottom -->
+      <figure class="about-gallery-tile about-gallery-tile--wide">
+        <div class="about-gallery-img-wrap">
+          <img loading="lazy" decoding="async" data-placeholder="about-gallery-image-4" data-context="A child and parent browsing toys together in a warm boutique toy store, genuine joyful moment, editorial lifestyle photography, soft pastel background, premium retail environment, natural light" width="900" height="340" src="/assets/site-about-gallery-image-4.webp" alt="הורה וילד מגלים יחד צעצועים בחנות">
+        </div>
+        <figcaption class="about-gallery-caption">רגעים של גילוי משותף</figcaption>
+      </figure>
+
+    </div>
+  </div>
+
+  <!-- Decorative leaf motif left -->
+  <div class="about-gallery-leaf about-gallery-leaf--start" aria-hidden="true">
+    <svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" data-no-icon-edit="true" aria-hidden="true">
+      <path d="M60 150 C20 120 0 80 10 40 C20 10 50 0 80 20 C110 40 120 80 100 120 C85 145 60 150 60 150Z" fill="#9EE6CF" opacity="0.45"></path>
+      <path d="M60 150 L60 60" stroke="#9EE6CF" stroke-width="2" opacity="0.35" stroke-linecap="round"></path>
+    </svg>
+  </div>
+
+  <!-- Decorative leaf motif right -->
+  <div class="about-gallery-leaf about-gallery-leaf--end" aria-hidden="true">
+    <svg viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg" data-no-icon-edit="true" aria-hidden="true">
+      <path d="M70 170 C30 140 5 95 15 45 C25 5 65 -5 100 20 C130 45 138 95 115 140 C98 165 70 170 70 170Z" fill="#FFB38A" opacity="0.38"></path>
+      <path d="M70 170 L70 65" stroke="#FFB38A" stroke-width="2" opacity="0.3" stroke-linecap="round"></path>
+    </svg>
+  </div>
+
+  <!-- Bottom divider: mint-to-ivory gradient wash with clipped lower contour -->
+  <div class="about-gallery-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gallery-divider-grad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#9EE6CF" stop-opacity="0.18"></stop>
+          <stop offset="50%" stop-color="#BFA6FF" stop-opacity="0.12"></stop>
+          <stop offset="100%" stop-color="#FFF9F1" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,90 L0,38 Q80,28 160,38 T320,32 Q400,28 480,38 T640,30 Q720,26 800,36 T960,30 Q1040,26 1120,34 T1200,30 L1200,90 Z" fill="#FDF8F2"></path>
+      <path d="M0,90 L0,52 Q80,44 160,52 T320,46 Q400,42 480,52 T640,44 Q720,40 800,50 T960,44 Q1040,40 1120,48 T1200,44 L1200,90 Z" fill="#FDF8F2"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="about-team-section" data-layout-spec="אודות-team" dir="rtl">
+  <!-- Decorative background texture -->
+  <div class="about-team-texture" aria-hidden="true"></div>
+
+  <!-- Floating decorative leaf motifs -->
+  <svg class="about-team-leaf about-team-leaf--right" aria-hidden="true" data-no-icon-edit="true" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M70,10 C110,20 140,60 130,110 C120,145 80,158 50,140 C20,122 10,80 30,45 C45,20 55,5 70,10 Z" fill="#F5C27A" opacity="0.55"></path>
+    <path d="M70,10 Q90,80 50,140" stroke="#E8A85A" stroke-width="2" opacity="0.4" fill="none"></path>
+  </svg>
+  <svg class="about-team-leaf about-team-leaf--left" aria-hidden="true" data-no-icon-edit="true" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M60,8 C95,18 115,55 105,100 C95,135 58,148 32,128 C8,110 5,70 22,40 C36,16 45,2 60,8 Z" fill="#BFA6FF" opacity="0.4"></path>
+    <path d="M60,8 Q75,74 32,128" stroke="#9E8ECC" stroke-width="1.5" opacity="0.35" fill="none"></path>
+  </svg>
+
+  <div class="about-team-container">
+    <!-- Section header -->
+    <header class="about-team-header">
+      <span class="about-team-eyebrow">הצוות שלנו</span>
+      <h2 class="about-team-title">הלב שמאחורי החנות</h2>
+      <p class="about-team-subtitle">אנחנו כאן כדי לעזור לכם למצוא את הצעצוע המושלם — עם ידע, חום ואהבה אמיתית לעולם המשחק</p>
+    </header>
+
+    <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu" dir="rtl" style="display:none">
+      <div class="catalog-menu-container">
+        <a href="/products" class="catalog-menu-item catalog-menu-all">כל הקורסים</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+
+    <!-- Team cards grid -->
+    <div class="about-team-grid">
+
+      <!-- Card 1: Curation -->
+      <article class="about-team-card">
+        <div class="about-team-img-wrapper">
+          <img loading="lazy" decoding="async" data-placeholder="about-team-image-1" data-context="Warm, approachable portrait of a smiling Israeli woman in her 30s standing in a colorful toy store, surrounded by shelves of quality toys and games, soft natural light, editorial photography style, peach and lavender tones" width="300" height="320" src="/assets/site-about-team-image-1.webp" alt="מנהלת אוצרות המוצרים של חנות הצעצועים">
+          <div class="about-team-img-accent" aria-hidden="true"></div>
+        </div>
+        <div class="about-team-card-body">
+          <span class="about-team-role-badge">אוצרות מוצרים</span>
+          <h3 class="about-team-name">מיכל לוי</h3>
+          <p class="about-team-bio">מיכל בוחרת כל צעצוע בקפידה — עם עין חדה לאיכות, בטיחות וערך חינוכי. היא מביאה לחנות רק את הטוב ביותר, מחברות מובילות בעולם ומיצרנים עצמאיים מוכשרים.</p>
+        </div>
+      </article>
+
+      <!-- Card 2: Gifting Guidance -->
+      <article class="about-team-card">
+        <div class="about-team-img-wrapper">
+          <img loading="lazy" decoding="async" data-placeholder="about-team-image-2" data-context="Warm portrait of a cheerful Israeli man in his 40s helping a family choose a gift in a bright toy store, holding a colorful board game box, soft editorial lighting, warm peach tones, genuine smile" width="300" height="320" src="/assets/site-about-team-image-2.webp" alt="יועץ מתנות של חנות הצעצועים">
+          <div class="about-team-img-accent" aria-hidden="true"></div>
+        </div>
+        <div class="about-team-card-body">
+          <span class="about-team-role-badge">יעוץ מתנות</span>
+          <h3 class="about-team-name">דני כהן</h3>
+          <p class="about-team-bio">דני הוא האיש שתרצו לפגוש כשאתם מחפשים את המתנה המושלמת. עם ניסיון של שנים ברשת קמעונאות צעצועים, הוא יוצא מגדרו כדי להתאים כל מתנה לאישיות הילד.</p>
+        </div>
+      </article>
+
+      <!-- Card 3: Educational Selection -->
+      <article class="about-team-card">
+        <div class="about-team-img-wrapper">
+          <img loading="lazy" decoding="async" data-placeholder="about-team-image-3" data-context="Warm portrait of a thoughtful Israeli woman educator in her late 30s sitting at a table with educational toys and wooden puzzles, bookshelf in background, soft lavender and cream tones, inviting editorial photography" width="300" height="320" src="/assets/site-about-team-image-3.webp" alt="יועצת חינוכית של חנות הצעצועים">
+          <div class="about-team-img-accent" aria-hidden="true"></div>
+        </div>
+        <div class="about-team-card-body">
+          <span class="about-team-role-badge">בחירה חינוכית</span>
+          <h3 class="about-team-name">רות שפירא</h3>
+          <p class="about-team-bio">רות, מחנכת לשעבר ואם לשלושה, מתמחה בצעצועים שמפתחים דמיון, חשיבה יצירתית ומיומנויות חיים. היא תעזור לכם לבחור משחק שהילד יאהב — ושיגדל איתו.</p>
+        </div>
+      </article>
+
+    </div>
+    <!-- end grid -->
+  </div>
+
+  <!-- Bottom torn-paper divider transitioning to review/dark section -->
+  <div class="about-team-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,42 Q30,36 60,44 T120,38 Q155,43 190,36 T260,41 Q295,36 330,43 T400,37 Q440,42 480,36 T550,41 Q590,37 630,43 T700,38 Q740,44 780,37 T850,42 Q890,36 930,43 T1000,38 Q1040,44 1080,37 T1150,42 L1200,40 L1200,90 Z" fill="#1A0F33"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="about-reviews-section" data-layout-spec="אודות-reviews" dir="rtl">
+  <!-- Vignette overlay -->
+  <div class="about-reviews-vignette" aria-hidden="true"></div>
+
+  <!-- Decorative floating motifs -->
+  <svg class="about-reviews-motif about-reviews-motif--right" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="80" cy="100" rx="55" ry="85" fill="#BFA6FF" opacity="0.10" transform="rotate(-20 80 100)"></ellipse>
+    <ellipse cx="80" cy="100" rx="32" ry="55" fill="#FFB38A" opacity="0.08" transform="rotate(15 80 100)"></ellipse>
+  </svg>
+  <svg class="about-reviews-motif about-reviews-motif--left" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="70" cy="90" rx="48" ry="75" fill="#9EE6CF" opacity="0.09" transform="rotate(18 70 90)"></ellipse>
+    <ellipse cx="70" cy="90" rx="28" ry="48" fill="#BFA6FF" opacity="0.07" transform="rotate(-12 70 90)"></ellipse>
+  </svg>
+
+  <div class="about-reviews-container">
+
+    <!-- Section header -->
+    <header class="about-reviews-header">
+      <span class="about-reviews-eyebrow">מה אומרים עלינו</span>
+      <h2 class="about-reviews-title">לקוחות שמחים,<br>ילדים מאושרים</h2>
+      <div class="about-reviews-title-underline" aria-hidden="true"></div>
+    </header>
+
+    <!-- Two review panels -->
+    <div class="about-reviews-grid">
+
+      <!-- Panel 1 -->
+      <article class="about-reviews-panel">
+        <div class="about-reviews-quote-mark" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="48" height="36" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 36V22.5C0 10.08 7.2 3.24 21.6 0L24 4.5C17.76 5.94 14.04 9.18 12.84 14.22H21.6V36H0ZM26.4 36V22.5C26.4 10.08 33.6 3.24 48 0L50.4 4.5C44.16 5.94 40.44 9.18 39.24 14.22H48V36H26.4Z" fill="#BFA6FF" opacity="0.45"></path>
+          </svg>
+        </div>
+        <blockquote class="about-reviews-quote">
+          <p>"הגעתי לחנות לפני יום הולדת של הבת שלי ולא ידעתי מה לקנות. הצוות הקדיש לי זמן, הקשיב, והמליץ על משחק שהיא פשוט מתה עליו. זו לא רק חנות צעצועים — זו חוויה שלמה של שמחה ואכפתיות."
+          </p>
+        </blockquote>
+        <footer class="about-reviews-source">
+          <div class="about-reviews-stars" aria-label="דירוג 5 כוכבים">
+            <span aria-hidden="true">★★★★★</span>
+          </div>
+          <div class="about-reviews-author-info">
+            <strong class="about-reviews-author-name">מיכל ר.</strong>
+            <span class="about-reviews-author-label">אמא לשלושה</span>
+          </div>
+        </footer>
+      </article>
+
+      <!-- Panel 2 -->
+      <article class="about-reviews-panel">
+        <div class="about-reviews-quote-mark" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="48" height="36" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 36V22.5C0 10.08 7.2 3.24 21.6 0L24 4.5C17.76 5.94 14.04 9.18 12.84 14.22H21.6V36H0ZM26.4 36V22.5C26.4 10.08 33.6 3.24 48 0L50.4 4.5C44.16 5.94 40.44 9.18 39.24 14.22H48V36H26.4Z" fill="#9EE6CF" opacity="0.45"></path>
+          </svg>
+        </div>
+        <blockquote class="about-reviews-quote">
+          <p>"אני סבא שלא מבין הרבה בצעצועים של היום, אבל כאן הרגשתי בנוח לשאול. הסבירו לי בסבלנות מה מתאים לגיל, מה מפתח ומה פשוט כיף. יצאתי עם מתנה מושלמת ועם חיוך גדול על הפנים."
+          </p>
+        </blockquote>
+        <footer class="about-reviews-source">
+          <div class="about-reviews-stars" aria-label="דירוג 5 כוכבים">
+            <span aria-hidden="true">★★★★★</span>
+          </div>
+          <div class="about-reviews-author-info">
+            <strong class="about-reviews-author-name">יוסף ב.</strong>
+            <span class="about-reviews-author-label">סבא גאה</span>
+          </div>
+        </footer>
+      </article>
+
+    </div>
+    <!-- /about-reviews-grid -->
+
+    <!-- Trust badge row -->
+    <div class="about-reviews-trust-row" aria-label="אמון וביטחון">
+      <div class="about-reviews-trust-item">
+        <span class="about-reviews-trust-icon" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2L17.09 9.26L25 10.27L19.5 15.64L20.91 23.5L14 19.77L7.09 23.5L8.5 15.64L3 10.27L10.91 9.26L14 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"></path>
+          </svg>
+        </span>
+        <span class="about-reviews-trust-text">מעל 2,000 ביקורות חיוביות</span>
+      </div>
+      <div class="about-reviews-trust-divider" aria-hidden="true"></div>
+      <div class="about-reviews-trust-item">
+        <span class="about-reviews-trust-icon" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 25C14 25 4 19 4 11.5C4 8.46 6.46 6 9.5 6C11.24 6 12.79 6.84 14 8C15.21 6.84 16.76 6 18.5 6C21.54 6 24 8.46 24 11.5C24 19 14 25 14 25Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"></path>
+          </svg>
+        </span>
+        <span class="about-reviews-trust-text">שירות מהלב מאז 2005</span>
+      </div>
+      <div class="about-reviews-trust-divider" aria-hidden="true"></div>
+      <div class="about-reviews-trust-item">
+        <span class="about-reviews-trust-icon" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 11H6C4.9 11 4 11.9 4 13V22C4 23.1 4.9 24 6 24H22C23.1 24 24 23.1 24 22V13C24 11.9 23.1 11 22 11Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"></path>
+            <path d="M8 11V8C8 5.79 9.79 4 12 4H16C18.21 4 20 5.79 20 8V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+          </svg>
+        </span>
+        <span class="about-reviews-trust-text">מוצרים איכותיים ובטוחים</span>
+      </div>
+    </div>
+
+  </div>
+  <!-- /about-reviews-container -->
+</section>
+  </main>
+  
+  <footer class="site-footer" dir="rtl" aria-label="כותרת תחתונה של האתר">
+  <div class="footer-top">
+    <div class="footer-container">
+
+      <!-- Column 1: Company Info -->
+      <div class="footer-col footer-brand">
+        <img src="/assets/retail-logo.webp" alt="חנות צעצועים" class="logo">
+        <p class="footer-tagline">עולם הדמיון מתחיל כאן — צעצועים איכותיים שמעוררים השראה, שמחה ויצירתיות לכל גיל.</p>
+        <div class="footer-badges">
+          <span class="badge"><i class="fas fa-truck"></i> משלוח חינם מעל ₪199</span>
+          <span class="badge"><i class="fas fa-headset"></i> תמיכה 24/7</span>
+        </div>
+      </div>
+
+      <!-- Column 2: Quick Links -->
+      <div class="footer-col footer-links">
+        <h3 class="footer-heading">ניווט מהיר</h3>
+        <ul class="footer-nav">
+          <li><a href="/">בית</a></li>
+          <li><a href="/features">תכונות</a></li>
+          <li><a href="/about">אודות</a></li>
+          <li><a href="/contact">צור קשר</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Contact -->
+      <div class="footer-col footer-contact-col">
+        <h3 class="footer-heading">יצירת קשר</h3>
+        <ul class="footer-contact">
+          <li>
+            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+            <span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span>
+          </li>
+          <li>
+            <span class="contact-icon"><i class="fas fa-phone"></i></span>
+            <span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span>
+          </li>
+          <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+            <span class="contact-text">[business_address]</span></a></li>
+        </ul>
+        <div class="footer-hours">
+          <h4 class="footer-hours-title"><i class="fas fa-clock"></i> שעות פעילות</h4>
+          <ul class="hours-list">
+            <li><a href="/"><span class="day">ראשון – חמישי</span><span class="time">09:00 – 20:00</span></a></li>
+            <li><a href="/"><span class="day">שישי</span><span class="time">09:00 – 14:00</span></a></li>
+            <li><a href="/"><span class="day">שבת</span><span class="time closed">סגור</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Column 4: Social -->
+      <div class="footer-col footer-social-col">
+        <h3 class="footer-heading">עקבו אחרינו</h3>
+        <p class="footer-social-desc">הצטרפו לקהילה שלנו וגלו עולמות חדשים של משחק ויצירה</p>
+        <div class="footer-social-icons">
+          
+          
+          
+        </div>
+        <div class="footer-trust">
+          <span class="trust-badge"><i class="fas fa-shield-alt"></i> קנייה מאובטחת</span>
+          <span class="trust-badge"><i class="fas fa-undo"></i> החזרה קלה</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="footer-divider"></div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bottom">
+    <div class="footer-container footer-bottom-inner">
+      <p class="footer-copyright">© 2026 חנות צעצועים. כל הזכויות שמורות.</p>
+      <div class="footer-legal">
+        <a href="/privacy">מדיניות פרטיות</a>
+        <span class="footer-sep">·</span>
+        <a href="/terms">תנאי שימוש</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות">
+              מדיניות החזרות
+            </a>
+        <span class="footer-sep">·</span>
+        <a href="/accessibility">נגישות</a>
+        <span class="footer-sep">·</span>
+        <a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>
